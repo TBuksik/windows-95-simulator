@@ -1,0 +1,33 @@
+{
+  "name": "windows-95-simulator",
+  "version": "1.0.0",
+  "description": "A nostalgic recreation of the Windows 95 desktop experience using HTML, CSS, and JavaScript",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve . -p 3000",
+    "dev": "npx live-server --port=3000",
+    "build": "echo 'No build process needed for static files'",
+    "test": "echo 'No tests specified'"
+  },
+  "keywords": [
+    "windows-95",
+    "simulator",
+    "retro",
+    "nostalgic",
+    "desktop",
+    "html",
+    "css",
+    "javascript"
+  ],
+  "author": "TBuksik",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TBuksik/windows-95-simulator"
+  },
+  "homepage": "https://TBuksik.github.io/windows-95-simulator",
+  "devDependencies": {
+    "live-server": "^1.2.2",
+    "serve": "^14.2.1"
+  }
+}

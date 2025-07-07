@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows 95 Simulator</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+    <div class="desktop" id="desktop">
+        <!-- Desktop Icons -->
+        <div class="desktop-icon" data-icon="my-computer" tabindex="0">
+            <img src="assets/icons/my-computer.svg" alt="My Computer" class="icon-image">
+            <span class="icon-label">My Computer</span>
+        </div>
+        
+        <div class="desktop-icon" data-icon="recycle-bin" tabindex="0">
+            <img src="assets/icons/recycle-bin.svg" alt="Recycle Bin" class="icon-image">
+            <span class="icon-label">Recycle Bin</span>
+        </div>
+        
+        <div class="desktop-icon" data-icon="my-documents" tabindex="0">
+            <img src="assets/icons/my-documents.svg" alt="My Documents" class="icon-image">
+            <span class="icon-label">My Documents</span>
+        </div>
+        
+        <!-- Selection Rectangle -->
+        <div class="selection-rect" id="selection-rect"></div>
+    </div>
+    
+    <!-- Taskbar -->
+    <div class="taskbar">
+        <div class="start-button">
+            <img src="assets/icons/start-button.svg" alt="Start">
+            Start
+        </div>
+        <div class="taskbar-separator"></div>
+        <div class="taskbar-clock">
+            <span id="clock">12:00 PM</span>
+        </div>
+    </div>
+    
+    <script src="js/desktop.js"></script>
+    <script src="js/clock.js"></script>
+</body>
+</html>

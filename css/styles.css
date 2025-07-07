@@ -1,0 +1,268 @@
+/* Windows 95 Simulator Styles */
+
+/* Font imports for authentic Windows 95 look */
+@import url('https://fonts.googleapis.com/css2?family=MS+Sans+Serif:wght@400;700&display=swap');
+
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'MS Sans Serif', sans-serif;
+    font-size: 11px;
+    color: #000000;
+    background: #008080; /* Teal desktop background */
+    overflow: hidden;
+    height: 100vh;
+    cursor: default;
+    user-select: none;
+}
+
+/* Desktop styles */
+.desktop {
+    position: relative;
+    width: 100vw;
+    height: calc(100vh - 30px); /* Account for taskbar */
+    background: #008080;
+    background-image: 
+        radial-gradient(circle at 20% 30%, rgba(255,255,255,0.1) 1px, transparent 1px),
+        radial-gradient(circle at 80% 70%, rgba(255,255,255,0.1) 1px, transparent 1px);
+    background-size: 100px 100px;
+    padding: 10px;
+}
+
+/* Desktop Icons */
+.desktop-icon {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 64px;
+    height: 80px;
+    padding: 4px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    background: transparent;
+    transition: all 0.1s ease;
+}
+
+.desktop-icon:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px dotted #ffffff;
+}
+
+.desktop-icon.selected {
+    background: #0000ff;
+    border: 1px dotted #ffffff;
+}
+
+.desktop-icon.selected .icon-label {
+    color: #ffffff;
+    background: #0000ff;
+}
+
+.desktop-icon:focus {
+    outline: none;
+}
+
+.icon-image {
+    width: 32px;
+    height: 32px;
+    margin-bottom: 4px;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+.icon-label {
+    font-size: 11px;
+    color: #ffffff;
+    text-align: center;
+    line-height: 1.2;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+    word-wrap: break-word;
+    max-width: 60px;
+    padding: 1px 2px;
+    border-radius: 0;
+}
+
+/* Position desktop icons */
+.desktop-icon[data-icon="my-computer"] {
+    top: 10px;
+    left: 10px;
+}
+
+.desktop-icon[data-icon="recycle-bin"] {
+    top: 100px;
+    left: 10px;
+}
+
+.desktop-icon[data-icon="my-documents"] {
+    top: 190px;
+    left: 10px;
+}
+
+/* Selection rectangle */
+.selection-rect {
+    position: absolute;
+    border: 1px solid #ffffff;
+    background: rgba(255, 255, 255, 0.2);
+    display: none;
+    pointer-events: none;
+}
+
+/* Taskbar */
+.taskbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 30px;
+    background: #c0c0c0;
+    border-top: 1px solid #ffffff;
+    border-left: 1px solid #ffffff;
+    border-right: 1px solid #808080;
+    border-bottom: 1px solid #808080;
+    display: flex;
+    align-items: center;
+    z-index: 1000;
+}
+
+.start-button {
+    height: 24px;
+    padding: 0 8px;
+    margin: 3px;
+    background: #c0c0c0;
+    border: 1px solid #c0c0c0;
+    border-top: 1px solid #ffffff;
+    border-left: 1px solid #ffffff;
+    border-right: 1px solid #808080;
+    border-bottom: 1px solid #808080;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: bold;
+    color: #000000;
+    transition: all 0.1s ease;
+}
+
+.start-button:hover {
+    background: #d0d0d0;
+}
+
+.start-button:active {
+    border-top: 1px solid #808080;
+    border-left: 1px solid #808080;
+    border-right: 1px solid #ffffff;
+    border-bottom: 1px solid #ffffff;
+    background: #b0b0b0;
+}
+
+.start-button img {
+    width: 16px;
+    height: 16px;
+    image-rendering: pixelated;
+}
+
+.taskbar-separator {
+    width: 1px;
+    height: 20px;
+    background: #808080;
+    margin: 0 4px;
+}
+
+.taskbar-clock {
+    margin-left: auto;
+    margin-right: 8px;
+    padding: 2px 8px;
+    background: #c0c0c0;
+    border: 1px solid #c0c0c0;
+    border-top: 1px solid #808080;
+    border-left: 1px solid #808080;
+    border-right: 1px solid #ffffff;
+    border-bottom: 1px solid #ffffff;
+    font-size: 11px;
+    color: #000000;
+}
+
+/* Double-click animation */
+.desktop-icon.double-clicked {
+    animation: doubleClickAnimation 0.3s ease;
+}
+
+@keyframes doubleClickAnimation {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    body {
+        font-size: 10px;
+    }
+    
+    .desktop-icon {
+        width: 56px;
+        height: 70px;
+    }
+    
+    .icon-image {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .icon-label {
+        font-size: 10px;
+        max-width: 52px;
+    }
+    
+    .taskbar {
+        height: 36px;
+    }
+    
+    .desktop {
+        height: calc(100vh - 36px);
+    }
+}
+
+/* Scrollbar styling for authentic Windows 95 look */
+::-webkit-scrollbar {
+    width: 16px;
+}
+
+::-webkit-scrollbar-track {
+    background: #c0c0c0;
+    border: 1px solid #808080;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c0c0c0;
+    border: 1px solid #c0c0c0;
+    border-top: 1px solid #ffffff;
+    border-left: 1px solid #ffffff;
+    border-right: 1px solid #808080;
+    border-bottom: 1px solid #808080;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #d0d0d0;
+}
+
+::-webkit-scrollbar-button {
+    background: #c0c0c0;
+    border: 1px solid #c0c0c0;
+    border-top: 1px solid #ffffff;
+    border-left: 1px solid #ffffff;
+    border-right: 1px solid #808080;
+    border-bottom: 1px solid #808080;
+}
+
+::-webkit-scrollbar-button:hover {
+    background: #d0d0d0;
+}
