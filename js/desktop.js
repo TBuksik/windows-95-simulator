@@ -11,6 +11,12 @@ class Desktop {
         this.lastClickTime = 0;
         this.lastClickedIcon = null;
         
+        // Window management
+        this.windows = new Map();
+        this.activeWindow = null;
+        this.nextWindowId = 1;
+        this.taskbarWindows = document.getElementById('taskbar-windows');
+        
         this.init();
     }
     
@@ -228,21 +234,262 @@ class Desktop {
     }
     
     openMyComputer() {
-        this.showNotification('Opening My Computer...');
-        console.log('My Computer opened');
-        // Future implementation: Open My Computer window
+        this.createWindow('my-computer', 'My Computer', 'assets/icons/my-computer.svg', this.getMyComputerContent());
     }
     
     openRecycleBin() {
-        this.showNotification('Opening Recycle Bin...');
-        console.log('Recycle Bin opened');
-        // Future implementation: Open Recycle Bin window
+        this.createWindow('recycle-bin', 'Recycle Bin', 'assets/icons/recycle-bin.svg', this.getRecycleBinContent());
     }
     
     openMyDocuments() {
-        this.showNotification('Opening My Documents...');
-        console.log('My Documents opened');
-        // Future implementation: Open My Documents window
+        this.createWindow('my-documents', 'My Documents', 'assets/icons/my-documents.svg', this.getMyDocumentsContent());
+    }
+    
+    createWindow(type, title, icon, content) {
+        const windowId = `window-${this.nextWindowId++}`;
+        
+        // Create window element
+        const windowElement = document.createElement('div');
+        windowElement.className = 'window visible';
+        windowElement.id = windowId;
+        windowElement.style.left = `${50 + (this.windows.size * 30)}px`;
+        windowElement.style.top = `${50 + (this.windows.size * 30)}px`;
+        windowElement.style.width = '400px';
+        windowElement.style.height = '300px';
+        
+        windowElement.innerHTML = `
+            <div class="window-title-bar">
+                <img src="${icon}" alt="${title}" class="window-icon">
+                <span class="window-title">${title}</span>
+                <div class="window-controls">
+                    <div class="window-control-button minimize-btn" title="Minimize">_</div>
+                    <div class="window-control-button maximize-btn" title="Maximize">□</div>
+                    <div class="window-control-button close-btn" title="Close">×</div>
+                </div>
+            </div>
+            <div class="window-content">
+                ${content}
+            </div>
+        `;
+        
+        this.desktop.appendChild(windowElement);
+        
+        // Create taskbar button
+        const taskbarButton = document.createElement('div');
+        taskbarButton.className = 'taskbar-window-button';
+        taskbarButton.innerHTML = `
+            <img src="${icon}" alt="${title}">
+            <span class="window-title">${title}</span>
+        `;
+        
+        this.taskbarWindows.appendChild(taskbarButton);
+        
+        // Store window data
+        const windowData = {
+            id: windowId,
+            type: type,
+            title: title,
+            icon: icon,
+            element: windowElement,
+            taskbarButton: taskbarButton,
+            isMinimized: false,
+            isMaximized: false
+        };
+        
+        this.windows.set(windowId, windowData);
+        
+        // Set up event listeners
+        this.setupWindowEventListeners(windowData);
+        
+        // Make this window active
+        this.setActiveWindow(windowId);
+        
+        return windowId;
+    }
+    
+    setupWindowEventListeners(windowData) {
+        const { element, taskbarButton, id } = windowData;
+        
+        // Title bar click to activate window
+        const titleBar = element.querySelector('.window-title-bar');
+        titleBar.addEventListener('mousedown', (e) => {
+            if (e.target === titleBar || e.target.classList.contains('window-title') || e.target.classList.contains('window-icon')) {
+                this.setActiveWindow(id);
+                this.setupWindowDrag(e, element);
+            }
+        });
+        
+        // Window control buttons
+        element.querySelector('.minimize-btn').addEventListener('click', () => {
+            this.minimizeWindow(id);
+        });
+        
+        element.querySelector('.maximize-btn').addEventListener('click', () => {
+            this.toggleMaximizeWindow(id);
+        });
+        
+        element.querySelector('.close-btn').addEventListener('click', () => {
+            this.closeWindow(id);
+        });
+        
+        // Taskbar button click
+        taskbarButton.addEventListener('click', () => {
+            this.toggleWindow(id);
+        });
+        
+        // Window content click to activate
+        element.addEventListener('mousedown', () => {
+            this.setActiveWindow(id);
+        });
+    }
+    
+    setupWindowDrag(e, windowElement) {
+        const startX = e.clientX;
+        const startY = e.clientY;
+        const startLeft = parseInt(windowElement.style.left) || 0;
+        const startTop = parseInt(windowElement.style.top) || 0;
+        
+        const handleMouseMove = (e) => {
+            const deltaX = e.clientX - startX;
+            const deltaY = e.clientY - startY;
+            
+            windowElement.style.left = `${startLeft + deltaX}px`;
+            windowElement.style.top = `${Math.max(0, startTop + deltaY)}px`;
+        };
+        
+        const handleMouseUp = () => {
+            document.removeEventListener('mousemove', handleMouseMove);
+            document.removeEventListener('mouseup', handleMouseUp);
+        };
+        
+        document.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('mouseup', handleMouseUp);
+    }
+    
+    setActiveWindow(windowId) {
+        // Deactivate all windows
+        this.windows.forEach((windowData, id) => {
+            windowData.element.classList.remove('active');
+            windowData.taskbarButton.classList.remove('active');
+            windowData.element.querySelector('.window-title-bar').classList.add('inactive');
+        });
+        
+        // Activate the selected window
+        const windowData = this.windows.get(windowId);
+        if (windowData && !windowData.isMinimized) {
+            windowData.element.classList.add('active');
+            windowData.taskbarButton.classList.add('active');
+            windowData.element.querySelector('.window-title-bar').classList.remove('inactive');
+            this.activeWindow = windowId;
+        }
+    }
+    
+    minimizeWindow(windowId) {
+        const windowData = this.windows.get(windowId);
+        if (windowData) {
+            windowData.element.style.display = 'none';
+            windowData.isMinimized = true;
+            windowData.taskbarButton.classList.remove('active');
+            
+            if (this.activeWindow === windowId) {
+                this.activeWindow = null;
+            }
+        }
+    }
+    
+    toggleMaximizeWindow(windowId) {
+        const windowData = this.windows.get(windowId);
+        if (windowData) {
+            if (windowData.isMaximized) {
+                // Restore window
+                windowData.element.style.left = windowData.restoreLeft || '100px';
+                windowData.element.style.top = windowData.restoreTop || '100px';
+                windowData.element.style.width = windowData.restoreWidth || '400px';
+                windowData.element.style.height = windowData.restoreHeight || '300px';
+                windowData.isMaximized = false;
+            } else {
+                // Maximize window
+                windowData.restoreLeft = windowData.element.style.left;
+                windowData.restoreTop = windowData.element.style.top;
+                windowData.restoreWidth = windowData.element.style.width;
+                windowData.restoreHeight = windowData.element.style.height;
+                
+                windowData.element.style.left = '0px';
+                windowData.element.style.top = '0px';
+                windowData.element.style.width = '100vw';
+                windowData.element.style.height = 'calc(100vh - 30px)';
+                windowData.isMaximized = true;
+            }
+        }
+    }
+    
+    toggleWindow(windowId) {
+        const windowData = this.windows.get(windowId);
+        if (windowData) {
+            if (windowData.isMinimized) {
+                // Restore window
+                windowData.element.style.display = 'block';
+                windowData.isMinimized = false;
+                this.setActiveWindow(windowId);
+            } else if (this.activeWindow === windowId) {
+                // Minimize if it's the active window
+                this.minimizeWindow(windowId);
+            } else {
+                // Activate window
+                this.setActiveWindow(windowId);
+            }
+        }
+    }
+    
+    closeWindow(windowId) {
+        const windowData = this.windows.get(windowId);
+        if (windowData) {
+            windowData.element.remove();
+            windowData.taskbarButton.remove();
+            this.windows.delete(windowId);
+            
+            if (this.activeWindow === windowId) {
+                this.activeWindow = null;
+            }
+        }
+    }
+    
+    getMyComputerContent() {
+        return `
+            <h2>My Computer</h2>
+            <p>This is a Windows 95 style My Computer window.</p>
+            <p>Here you would typically see:</p>
+            <p>• Local disk drives (C:, D:, etc.)</p>
+            <p>• Floppy disk drives (A:, B:)</p>
+            <p>• CD-ROM drives</p>
+            <p>• Network drives</p>
+            <p>• Control Panel</p>
+            <p>• Printers folder</p>
+        `;
+    }
+    
+    getRecycleBinContent() {
+        return `
+            <h2>Recycle Bin</h2>
+            <p>The Recycle Bin is currently empty.</p>
+            <p>When you delete files or folders, they are moved to the Recycle Bin where they can be restored or permanently deleted.</p>
+            <p>To restore an item, select it and click Restore.</p>
+            <p>To permanently delete all items, click Empty Recycle Bin.</p>
+        `;
+    }
+    
+    getMyDocumentsContent() {
+        return `
+            <h2>My Documents</h2>
+            <p>This is your personal document folder.</p>
+            <p>You can store and organize your files here:</p>
+            <p>• Text documents</p>
+            <p>• Spreadsheets</p>
+            <p>• Presentations</p>
+            <p>• Images and graphics</p>
+            <p>• Other personal files</p>
+            <p>This folder is private to your user account.</p>
+        `;
     }
     
     showNotification(message) {

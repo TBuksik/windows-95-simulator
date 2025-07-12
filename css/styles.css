@@ -114,6 +114,115 @@ body {
     pointer-events: none;
 }
 
+/* Windows */
+.window {
+    position: absolute;
+    background: #c0c0c0;
+    border: 2px solid #c0c0c0;
+    border-top: 2px solid #ffffff;
+    border-left: 2px solid #ffffff;
+    border-right: 2px solid #808080;
+    border-bottom: 2px solid #808080;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    min-width: 300px;
+    min-height: 200px;
+    z-index: 100;
+    display: none;
+}
+
+.window.active {
+    z-index: 200;
+}
+
+.window.visible {
+    display: block;
+}
+
+.window-title-bar {
+    height: 18px;
+    background: linear-gradient(to right, #000080, #000040);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    padding: 2px 4px;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: move;
+}
+
+.window-title-bar.inactive {
+    background: linear-gradient(to right, #808080, #404040);
+}
+
+.window-title-bar .window-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+    image-rendering: pixelated;
+}
+
+.window-title-bar .window-title {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.window-controls {
+    display: flex;
+    gap: 2px;
+    margin-left: auto;
+}
+
+.window-control-button {
+    width: 16px;
+    height: 14px;
+    background: #c0c0c0;
+    border: 1px solid #c0c0c0;
+    border-top: 1px solid #ffffff;
+    border-left: 1px solid #ffffff;
+    border-right: 1px solid #808080;
+    border-bottom: 1px solid #808080;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    font-weight: bold;
+}
+
+.window-control-button:hover {
+    background: #d0d0d0;
+}
+
+.window-control-button:active {
+    border-top: 1px solid #808080;
+    border-left: 1px solid #808080;
+    border-right: 1px solid #ffffff;
+    border-bottom: 1px solid #ffffff;
+    background: #b0b0b0;
+}
+
+.window-content {
+    padding: 8px;
+    height: calc(100% - 18px);
+    overflow: auto;
+    background: #ffffff;
+}
+
+.window-content h2 {
+    margin: 0 0 8px 0;
+    font-size: 12px;
+    color: #000000;
+}
+
+.window-content p {
+    margin: 4px 0;
+    font-size: 11px;
+    color: #000000;
+    line-height: 1.3;
+}
+
 /* Taskbar */
 .taskbar {
     position: fixed;
@@ -174,6 +283,73 @@ body {
     height: 20px;
     background: #808080;
     margin: 0 4px;
+}
+
+/* Taskbar Windows Container */
+.taskbar-windows {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: 2px;
+    padding: 0 4px;
+    overflow: hidden;
+}
+
+/* Taskbar Window Button */
+.taskbar-window-button {
+    height: 24px;
+    min-width: 120px;
+    max-width: 180px;
+    padding: 0 8px;
+    background: #c0c0c0;
+    border: 1px solid #c0c0c0;
+    border-top: 1px solid #ffffff;
+    border-left: 1px solid #ffffff;
+    border-right: 1px solid #808080;
+    border-bottom: 1px solid #808080;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    color: #000000;
+    transition: all 0.1s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.taskbar-window-button:hover {
+    background: #d0d0d0;
+}
+
+.taskbar-window-button:active {
+    border-top: 1px solid #808080;
+    border-left: 1px solid #808080;
+    border-right: 1px solid #ffffff;
+    border-bottom: 1px solid #ffffff;
+    background: #b0b0b0;
+}
+
+.taskbar-window-button.active {
+    background: #a0a0a0;
+    border-top: 1px solid #808080;
+    border-left: 1px solid #808080;
+    border-right: 1px solid #ffffff;
+    border-bottom: 1px solid #ffffff;
+}
+
+.taskbar-window-button img {
+    width: 16px;
+    height: 16px;
+    image-rendering: pixelated;
+    flex-shrink: 0;
+}
+
+.taskbar-window-button .window-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .taskbar-clock {
