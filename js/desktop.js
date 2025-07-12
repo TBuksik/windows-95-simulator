@@ -8,8 +8,6 @@ class Desktop {
         this.startY = 0;
         this.selectionRect = document.getElementById('selection-rect');
         this.desktop = document.getElementById('desktop');
-        this.lastClickTime = 0;
-        this.lastClickedIcon = null;
         
         // Window management
         this.windows = new Map();
@@ -140,16 +138,6 @@ class Desktop {
     handleIconClick(e) {
         e.stopPropagation();
         const icon = e.currentTarget;
-        const currentTime = Date.now();
-        
-        // Check for double-click
-        if (this.lastClickedIcon === icon && currentTime - this.lastClickTime < 300) {
-            this.handleIconDoubleClick(e);
-            return;
-        }
-        
-        this.lastClickTime = currentTime;
-        this.lastClickedIcon = icon;
         
         // Handle selection
         if (e.ctrlKey) {
