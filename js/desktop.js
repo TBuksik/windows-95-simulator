@@ -15,12 +15,19 @@ class Desktop {
         this.nextWindowId = 1;
         this.taskbarWindows = document.getElementById('taskbar-windows');
         
+        // Start menu
+        this.startMenu = null;
+        this.isStartMenuOpen = false;
+        this.startButton = null;
+        
         this.init();
     }
     
     init() {
         this.attachEventListeners();
         this.setupKeyboardNavigation();
+        this.createStartMenu();
+        this.setupStartButton();
     }
     
     attachEventListeners() {
@@ -46,6 +53,11 @@ class Desktop {
             if (!e.target.closest('.desktop-icon') && !e.target.closest('.desktop')) {
                 this.clearSelection();
             }
+            
+            // Close start menu when clicking outside
+            if (!e.target.closest('.start-button') && !e.target.closest('.start-menu')) {
+                this.closeStartMenu();
+            }
         });
     }
     
@@ -55,6 +67,8 @@ class Desktop {
                 this.handleDeleteKey();
             } else if (e.key === 'Enter' && this.selectedIcons.size === 1) {
                 this.handleEnterKey();
+            } else if (e.key === 'Escape') {
+                this.closeStartMenu();
             }
         });
     }
@@ -501,6 +515,326 @@ class Desktop {
         setTimeout(() => {
             notification.remove();
         }, 3000);
+    }
+    
+    setupStartButton() {
+        this.startButton = document.querySelector('.start-button');
+        if (this.startButton) {
+            this.startButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.toggleStartMenu();
+            });
+        }
+    }
+    
+    createStartMenu() {
+        this.startMenu = document.createElement('div');
+        this.startMenu.className = 'start-menu';
+        this.startMenu.innerHTML = `
+            <div class="start-menu-banner">
+                <span class="start-menu-banner-text">Windows<span class="banner-95">95</span></span>
+            </div>
+            <div class="start-menu-content">
+                <div class="start-menu-item" data-action="programs">
+                    <img src="assets/icons/my-computer.svg" alt="Programs" class="start-menu-icon">
+                    <span>Programs</span>
+                    <span class="submenu-arrow">▶</span>
+                </div>
+                <div class="start-menu-item" data-action="documents">
+                    <img src="assets/icons/my-documents.svg" alt="Documents" class="start-menu-icon">
+                    <span>Documents</span>
+                    <span class="submenu-arrow">▶</span>
+                </div>
+                <div class="start-menu-item" data-action="settings">
+                    <img src="assets/icons/my-computer.svg" alt="Settings" class="start-menu-icon">
+                    <span>Settings</span>
+                    <span class="submenu-arrow">▶</span>
+                </div>
+                <div class="start-menu-item" data-action="find">
+                    <img src="assets/icons/my-documents.svg" alt="Find" class="start-menu-icon">
+                    <span>Find</span>
+                </div>
+                <div class="start-menu-item" data-action="help">
+                    <img src="assets/icons/my-computer.svg" alt="Help" class="start-menu-icon">
+                    <span>Help</span>
+                </div>
+                <div class="start-menu-item" data-action="run">
+                    <img src="assets/icons/my-documents.svg" alt="Run" class="start-menu-icon">
+                    <span>Run...</span>
+                </div>
+                <div class="start-menu-separator"></div>
+                <div class="start-menu-item" data-action="shutdown">
+                    <img src="assets/icons/recycle-bin.svg" alt="Shut Down" class="start-menu-icon">
+                    <span>Shut Down...</span>
+                </div>
+            </div>
+        `;
+        
+        // Add submenu containers
+        this.createSubmenus();
+        
+        document.body.appendChild(this.startMenu);
+        
+        // Add event listeners for menu items
+        this.setupStartMenuEventListeners();
+    }
+    
+    createSubmenus() {
+        // Programs submenu
+        const programsSubmenu = document.createElement('div');
+        programsSubmenu.className = 'start-submenu programs-submenu';
+        programsSubmenu.innerHTML = `
+            <div class="start-menu-item" data-action="accessories">
+                <img src="assets/icons/my-computer.svg" alt="Accessories" class="start-menu-icon">
+                <span>Accessories</span>
+                <span class="submenu-arrow">▶</span>
+            </div>
+            <div class="start-menu-item" data-action="games">
+                <img src="assets/icons/my-documents.svg" alt="Games" class="start-menu-icon">
+                <span>Games</span>
+                <span class="submenu-arrow">▶</span>
+            </div>
+            <div class="start-menu-item" data-action="msdos">
+                <img src="assets/icons/recycle-bin.svg" alt="MS-DOS Prompt" class="start-menu-icon">
+                <span>MS-DOS Prompt</span>
+            </div>
+            <div class="start-menu-item" data-action="startup">
+                <img src="assets/icons/my-computer.svg" alt="StartUp" class="start-menu-icon">
+                <span>StartUp</span>
+            </div>
+        `;
+        
+        // Settings submenu
+        const settingsSubmenu = document.createElement('div');
+        settingsSubmenu.className = 'start-submenu settings-submenu';
+        settingsSubmenu.innerHTML = `
+            <div class="start-menu-item" data-action="control-panel">
+                <img src="assets/icons/my-computer.svg" alt="Control Panel" class="start-menu-icon">
+                <span>Control Panel</span>
+            </div>
+            <div class="start-menu-item" data-action="printers">
+                <img src="assets/icons/my-documents.svg" alt="Printers" class="start-menu-icon">
+                <span>Printers</span>
+            </div>
+            <div class="start-menu-item" data-action="taskbar">
+                <img src="assets/icons/recycle-bin.svg" alt="Taskbar" class="start-menu-icon">
+                <span>Taskbar & Start Menu...</span>
+            </div>
+        `;
+        
+        // Documents submenu
+        const documentsSubmenu = document.createElement('div');
+        documentsSubmenu.className = 'start-submenu documents-submenu';
+        documentsSubmenu.innerHTML = `
+            <div class="start-menu-item" data-action="mydocs">
+                <img src="assets/icons/my-documents.svg" alt="My Documents" class="start-menu-icon">
+                <span>My Documents</span>
+            </div>
+            <div class="start-menu-separator"></div>
+            <div class="start-menu-item disabled">
+                <span>(Empty)</span>
+            </div>
+        `;
+        
+        this.startMenu.appendChild(programsSubmenu);
+        this.startMenu.appendChild(settingsSubmenu);
+        this.startMenu.appendChild(documentsSubmenu);
+    }
+    
+    setupStartMenuEventListeners() {
+        const menuItems = this.startMenu.querySelectorAll('.start-menu-item:not(.disabled)');
+        
+        menuItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const action = item.dataset.action;
+                this.handleStartMenuAction(action);
+            });
+            
+            item.addEventListener('mouseenter', (e) => {
+                this.handleSubmenuHover(e.target);
+            });
+        });
+        
+        // Hide submenus when hovering over main menu
+        this.startMenu.addEventListener('mouseleave', () => {
+            this.hideAllSubmenus();
+        });
+    }
+    
+    handleSubmenuHover(item) {
+        this.hideAllSubmenus();
+        
+        const action = item.dataset.action;
+        if (action === 'programs') {
+            this.showSubmenu('programs-submenu', item);
+        } else if (action === 'settings') {
+            this.showSubmenu('settings-submenu', item);
+        } else if (action === 'documents') {
+            this.showSubmenu('documents-submenu', item);
+        }
+    }
+    
+    showSubmenu(submenuClass, parentItem) {
+        const submenu = this.startMenu.querySelector(`.${submenuClass}`);
+        if (submenu) {
+            const parentRect = parentItem.getBoundingClientRect();
+            submenu.style.display = 'block';
+            submenu.style.left = `${parentRect.right}px`;
+            submenu.style.top = `${parentRect.top}px`;
+        }
+    }
+    
+    hideAllSubmenus() {
+        const submenus = this.startMenu.querySelectorAll('.start-submenu');
+        submenus.forEach(submenu => {
+            submenu.style.display = 'none';
+        });
+    }
+    
+    handleStartMenuAction(action) {
+        switch (action) {
+            case 'programs':
+                this.showNotification('Programs menu opened');
+                break;
+            case 'documents':
+                this.showNotification('Documents menu opened');
+                break;
+            case 'mydocs':
+                this.openMyDocuments();
+                this.closeStartMenu();
+                break;
+            case 'settings':
+                this.showNotification('Settings menu opened');
+                break;
+            case 'control-panel':
+                this.showNotification('Control Panel would open here');
+                this.closeStartMenu();
+                break;
+            case 'find':
+                this.showNotification('Find dialog would open here');
+                this.closeStartMenu();
+                break;
+            case 'help':
+                this.showNotification('Help system would open here');
+                this.closeStartMenu();
+                break;
+            case 'run':
+                this.showRunDialog();
+                this.closeStartMenu();
+                break;
+            case 'shutdown':
+                this.showShutdownDialog();
+                this.closeStartMenu();
+                break;
+            case 'msdos':
+                this.showNotification('MS-DOS Prompt would open here');
+                this.closeStartMenu();
+                break;
+            default:
+                this.showNotification(`${action} clicked`);
+                this.closeStartMenu();
+        }
+    }
+    
+    showRunDialog() {
+        const dialog = this.createDialog('Run', `
+            <p>Type the name of a program, folder, document, or Internet resource, and Windows will open it for you.</p>
+            <div style="margin: 10px 0;">
+                <label for="run-input">Open:</label><br>
+                <input type="text" id="run-input" style="width: 100%; padding: 2px; margin-top: 4px; font-family: 'MS Sans Serif', sans-serif; font-size: 11px;">
+            </div>
+        `, [
+            { text: 'OK', action: () => { this.showNotification('Run command executed'); this.closeDialog(); } },
+            { text: 'Cancel', action: () => this.closeDialog() },
+            { text: 'Browse...', action: () => this.showNotification('Browse dialog would open') }
+        ]);
+    }
+    
+    showShutdownDialog() {
+        const dialog = this.createDialog('Shut Down Windows', `
+            <p>What do you want the computer to do?</p>
+            <div style="margin: 10px 0;">
+                <input type="radio" id="shutdown-option" name="shutdown" value="shutdown" checked>
+                <label for="shutdown-option">Shut down the computer?</label><br>
+                <input type="radio" id="restart-option" name="shutdown" value="restart">
+                <label for="restart-option">Restart the computer?</label><br>
+                <input type="radio" id="logoff-option" name="shutdown" value="logoff">
+                <label for="logoff-option">Close all programs and log on as a different user?</label>
+            </div>
+        `, [
+            { text: 'Yes', action: () => { this.showNotification('System would shut down'); this.closeDialog(); } },
+            { text: 'No', action: () => this.closeDialog() },
+            { text: 'Help', action: () => this.showNotification('Help would open') }
+        ]);
+    }
+    
+    createDialog(title, content, buttons) {
+        const dialog = document.createElement('div');
+        dialog.className = 'dialog-overlay';
+        
+        const dialogBox = document.createElement('div');
+        dialogBox.className = 'dialog-box';
+        
+        dialogBox.innerHTML = `
+            <div class="dialog-title-bar">
+                <span class="dialog-title">${title}</span>
+                <div class="dialog-close-btn">×</div>
+            </div>
+            <div class="dialog-content">
+                ${content}
+            </div>
+            <div class="dialog-buttons">
+                ${buttons.map(btn => `<button class="dialog-button" data-action="${btn.text}">${btn.text}</button>`).join('')}
+            </div>
+        `;
+        
+        dialog.appendChild(dialogBox);
+        document.body.appendChild(dialog);
+        
+        // Add event listeners
+        dialogBox.querySelector('.dialog-close-btn').addEventListener('click', () => this.closeDialog());
+        
+        buttons.forEach(btn => {
+            const buttonEl = dialogBox.querySelector(`[data-action="${btn.text}"]`);
+            buttonEl.addEventListener('click', btn.action);
+        });
+        
+        this.currentDialog = dialog;
+        return dialog;
+    }
+    
+    closeDialog() {
+        if (this.currentDialog) {
+            this.currentDialog.remove();
+            this.currentDialog = null;
+        }
+    }
+    
+    toggleStartMenu() {
+        if (this.isStartMenuOpen) {
+            this.closeStartMenu();
+        } else {
+            this.openStartMenu();
+        }
+    }
+    
+    openStartMenu() {
+        this.startMenu.style.display = 'block';
+        this.isStartMenuOpen = true;
+        this.startButton.classList.add('pressed');
+        this.hideAllSubmenus();
+    }
+    
+    closeStartMenu() {
+        if (this.startMenu) {
+            this.startMenu.style.display = 'none';
+            this.isStartMenuOpen = false;
+            if (this.startButton) {
+                this.startButton.classList.remove('pressed');
+            }
+            this.hideAllSubmenus();
+        }
     }
 }
 

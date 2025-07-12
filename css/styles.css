@@ -442,3 +442,267 @@ body {
 ::-webkit-scrollbar-button:hover {
     background: #d0d0d0;
 }
+
+/* Start Menu Styles */
+.start-menu {
+    position: fixed;
+    bottom: 30px;
+    left: 0;
+    width: 200px;
+    background: #c0c0c0;
+    border: 2px solid #c0c0c0;
+    border-top: 2px solid #ffffff;
+    border-left: 2px solid #ffffff;
+    border-right: 2px solid #808080;
+    border-bottom: 2px solid #808080;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    z-index: 2000;
+    display: none;
+    font-family: 'MS Sans Serif', sans-serif;
+    font-size: 11px;
+}
+
+.start-menu-banner {
+    height: 50px;
+    background: linear-gradient(to right, #000080, #000040);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    justify-content: center;
+    position: relative;
+}
+
+.start-menu-banner-text {
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    transform: rotate(180deg);
+}
+
+.banner-95 {
+    font-size: 20px;
+    color: #ffff00;
+    margin-left: 4px;
+}
+
+.start-menu-content {
+    padding: 2px;
+    background: #c0c0c0;
+}
+
+.start-menu-item {
+    display: flex;
+    align-items: center;
+    padding: 4px 8px;
+    cursor: pointer;
+    position: relative;
+    white-space: nowrap;
+    min-height: 24px;
+}
+
+.start-menu-item:hover:not(.disabled) {
+    background: #0000ff;
+    color: #ffffff;
+}
+
+.start-menu-item.disabled {
+    color: #808080;
+    cursor: default;
+}
+
+.start-menu-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    image-rendering: pixelated;
+    flex-shrink: 0;
+}
+
+.start-menu-item span {
+    flex: 1;
+}
+
+.submenu-arrow {
+    margin-left: auto;
+    font-size: 8px;
+    color: #000000;
+}
+
+.start-menu-item:hover:not(.disabled) .submenu-arrow {
+    color: #ffffff;
+}
+
+.start-menu-separator {
+    height: 1px;
+    background: #808080;
+    margin: 2px 4px;
+    border-bottom: 1px solid #ffffff;
+}
+
+/* Start Submenus */
+.start-submenu {
+    position: fixed;
+    background: #c0c0c0;
+    border: 2px solid #c0c0c0;
+    border-top: 2px solid #ffffff;
+    border-left: 2px solid #ffffff;
+    border-right: 2px solid #808080;
+    border-bottom: 2px solid #808080;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    z-index: 2001;
+    display: none;
+    width: 180px;
+    padding: 2px;
+}
+
+/* Start Button Pressed State */
+.start-button.pressed {
+    border-top: 1px solid #808080;
+    border-left: 1px solid #808080;
+    border-right: 1px solid #ffffff;
+    border-bottom: 1px solid #ffffff;
+    background: #b0b0b0;
+}
+
+/* Dialog Styles */
+.dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dialog-box {
+    background: #c0c0c0;
+    border: 2px solid #c0c0c0;
+    border-top: 2px solid #ffffff;
+    border-left: 2px solid #ffffff;
+    border-right: 2px solid #808080;
+    border-bottom: 2px solid #808080;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    min-width: 300px;
+    max-width: 400px;
+    font-family: 'MS Sans Serif', sans-serif;
+    font-size: 11px;
+}
+
+.dialog-title-bar {
+    height: 18px;
+    background: linear-gradient(to right, #000080, #000040);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    padding: 2px 4px;
+    font-weight: bold;
+}
+
+.dialog-title {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dialog-close-btn {
+    width: 16px;
+    height: 14px;
+    background: #c0c0c0;
+    border: 1px solid #c0c0c0;
+    border-top: 1px solid #ffffff;
+    border-left: 1px solid #ffffff;
+    border-right: 1px solid #808080;
+    border-bottom: 1px solid #808080;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    font-weight: bold;
+    color: #000000;
+}
+
+.dialog-close-btn:hover {
+    background: #d0d0d0;
+}
+
+.dialog-close-btn:active {
+    border-top: 1px solid #808080;
+    border-left: 1px solid #808080;
+    border-right: 1px solid #ffffff;
+    border-bottom: 1px solid #ffffff;
+    background: #b0b0b0;
+}
+
+.dialog-content {
+    padding: 12px;
+    background: #c0c0c0;
+    color: #000000;
+    line-height: 1.4;
+}
+
+.dialog-content p {
+    margin: 0 0 8px 0;
+}
+
+.dialog-content input[type="text"] {
+    border: 1px solid #808080;
+    border-top: 1px solid #000000;
+    border-left: 1px solid #000000;
+    background: #ffffff;
+    color: #000000;
+    padding: 2px;
+}
+
+.dialog-content input[type="radio"] {
+    margin-right: 6px;
+    margin-bottom: 4px;
+}
+
+.dialog-content label {
+    margin-bottom: 4px;
+    display: inline-block;
+}
+
+.dialog-buttons {
+    padding: 8px 12px;
+    background: #c0c0c0;
+    text-align: right;
+    border-top: 1px solid #808080;
+}
+
+.dialog-button {
+    width: 75px;
+    height: 23px;
+    margin-left: 6px;
+    background: #c0c0c0;
+    border: 1px solid #c0c0c0;
+    border-top: 1px solid #ffffff;
+    border-left: 1px solid #ffffff;
+    border-right: 1px solid #808080;
+    border-bottom: 1px solid #808080;
+    cursor: pointer;
+    font-family: 'MS Sans Serif', sans-serif;
+    font-size: 11px;
+    color: #000000;
+}
+
+.dialog-button:hover {
+    background: #d0d0d0;
+}
+
+.dialog-button:active {
+    border-top: 1px solid #808080;
+    border-left: 1px solid #808080;
+    border-right: 1px solid #ffffff;
+    border-bottom: 1px solid #ffffff;
+    background: #b0b0b0;
+}
