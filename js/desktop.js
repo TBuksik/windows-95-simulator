@@ -639,6 +639,18 @@ class Desktop {
         this.startMenu.appendChild(programsSubmenu);
         this.startMenu.appendChild(settingsSubmenu);
         this.startMenu.appendChild(documentsSubmenu);
+        
+        // Add event listeners to submenu items
+        [programsSubmenu, settingsSubmenu, documentsSubmenu].forEach(submenu => {
+            const submenuItems = submenu.querySelectorAll('.start-menu-item:not(.disabled)');
+            submenuItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const action = item.dataset.action;
+                    this.handleStartMenuAction(action);
+                });
+            });
+        });
     }
     
     setupStartMenuEventListeners() {
@@ -656,13 +668,38 @@ class Desktop {
             });
         });
         
-        // Hide submenus when hovering over main menu
-        this.startMenu.addEventListener('mouseleave', () => {
-            this.hideAllSubmenus();
+        // Add hover events for submenus to keep them open
+        const submenus = this.startMenu.querySelectorAll('.start-submenu');
+        submenus.forEach(submenu => {
+            submenu.addEventListener('mouseenter', () => {
+                // Keep the submenu open when hovering over it
+                if (this.submenuTimeout) {
+                    clearTimeout(this.submenuTimeout);
+                }
+            });
+            
+            submenu.addEventListener('mouseleave', () => {
+                // Close submenu when leaving
+                this.hideAllSubmenusDelayed();
+            });
+        });
+        
+        // Hide submenus when leaving the main menu area
+        this.startMenu.addEventListener('mouseleave', (e) => {
+            // Check if we're moving to a submenu
+            const relatedTarget = e.relatedTarget;
+            if (!relatedTarget || !relatedTarget.closest('.start-submenu')) {
+                this.hideAllSubmenusDelayed();
+            }
         });
     }
     
     handleSubmenuHover(item) {
+        // Clear any existing timeout
+        if (this.submenuTimeout) {
+            clearTimeout(this.submenuTimeout);
+        }
+        
         this.hideAllSubmenus();
         
         const action = item.dataset.action;
@@ -679,8 +716,10 @@ class Desktop {
         const submenu = this.startMenu.querySelector(`.${submenuClass}`);
         if (submenu) {
             const parentRect = parentItem.getBoundingClientRect();
+            const startMenuRect = this.startMenu.getBoundingClientRect();
+            
             submenu.style.display = 'block';
-            submenu.style.left = `${parentRect.right}px`;
+            submenu.style.left = `${startMenuRect.right - 2}px`; // Slight overlap to prevent gap
             submenu.style.top = `${parentRect.top}px`;
         }
     }
@@ -690,6 +729,15 @@ class Desktop {
         submenus.forEach(submenu => {
             submenu.style.display = 'none';
         });
+    }
+    
+    hideAllSubmenusDelayed() {
+        if (this.submenuTimeout) {
+            clearTimeout(this.submenuTimeout);
+        }
+        this.submenuTimeout = setTimeout(() => {
+            this.hideAllSubmenus();
+        }, 100);
     }
     
     handleStartMenuAction(action) {
