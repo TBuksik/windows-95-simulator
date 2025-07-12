@@ -678,16 +678,19 @@ class Desktop {
                 }
             });
             
-            submenu.addEventListener('mouseleave', () => {
-                // Close submenu when leaving
-                this.hideAllSubmenusDelayed();
+            submenu.addEventListener('mouseleave', (e) => {
+                // Only close if not moving back to the main menu
+                const relatedTarget = e.relatedTarget;
+                if (!relatedTarget || (!relatedTarget.closest('.start-menu') && !relatedTarget.closest('.start-submenu'))) {
+                    this.hideAllSubmenusDelayed();
+                }
             });
         });
         
-        // Hide submenus when leaving the main menu area
+        // Improve the main menu mouseleave detection
         this.startMenu.addEventListener('mouseleave', (e) => {
-            // Check if we're moving to a submenu
             const relatedTarget = e.relatedTarget;
+            // Only close if not moving to a submenu
             if (!relatedTarget || !relatedTarget.closest('.start-submenu')) {
                 this.hideAllSubmenusDelayed();
             }
@@ -719,7 +722,7 @@ class Desktop {
             const startMenuRect = this.startMenu.getBoundingClientRect();
             
             submenu.style.display = 'block';
-            submenu.style.left = `${startMenuRect.right - 2}px`; // Slight overlap to prevent gap
+            submenu.style.left = `${startMenuRect.right - 4}px`; // More overlap to prevent gap
             submenu.style.top = `${parentRect.top}px`;
         }
     }
@@ -737,7 +740,7 @@ class Desktop {
         }
         this.submenuTimeout = setTimeout(() => {
             this.hideAllSubmenus();
-        }, 100);
+        }, 200);
     }
     
     handleStartMenuAction(action) {

@@ -564,6 +564,17 @@ body {
     padding: 2px;
 }
 
+.start-submenu::before {
+    content: '';
+    position: absolute;
+    left: -6px;
+    top: 0;
+    bottom: 0;
+    width: 6px;
+    background: transparent;
+    z-index: 2002;
+}
+
 .start-submenu .start-menu-item {
     display: flex;
     align-items: center;
