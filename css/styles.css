@@ -19,19 +19,23 @@ body {
     height: 100vh;
     cursor: default;
     user-select: none;
+    transform: scale(1.5);
+    transform-origin: 0 0;
+    width: 66.67vw; /* 100% / 1.5 to prevent horizontal overflow */
+    height: 66.67vh; /* 100% / 1.5 to prevent vertical overflow */
 }
 
 /* Desktop styles */
 .desktop {
     position: relative;
     width: 100vw;
-    height: calc(100vh - 30px); /* Account for taskbar */
+    height: calc(100vh - 20px); /* Account for taskbar - reduced for scaling */
     background: #008080;
     background-image: 
         radial-gradient(circle at 20% 30%, rgba(255,255,255,0.1) 1px, transparent 1px),
         radial-gradient(circle at 80% 70%, rgba(255,255,255,0.1) 1px, transparent 1px);
-    background-size: 100px 100px;
-    padding: 10px;
+    background-size: 66.67px 66.67px; /* Adjust pattern size for scale */
+    padding: 6.67px; /* 10px / 1.5 */
 }
 
 /* Desktop Icons */
@@ -229,7 +233,7 @@ body {
     bottom: 0;
     left: 0;
     right: 0;
-    height: 30px;
+    height: 20px; /* 30px / 1.5 */
     background: #c0c0c0;
     border-top: 1px solid #ffffff;
     border-left: 1px solid #ffffff;
@@ -241,9 +245,9 @@ body {
 }
 
 .start-button {
-    height: 24px;
-    padding: 0 8px;
-    margin: 3px;
+    height: 16px; /* 24px / 1.5 */
+    padding: 0 5.33px; /* 8px / 1.5 */
+    margin: 2px; /* 3px / 1.5 */
     background: #c0c0c0;
     border: 1px solid #c0c0c0;
     border-top: 1px solid #ffffff;
@@ -252,7 +256,7 @@ body {
     border-bottom: 1px solid #808080;
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 2.67px; /* 4px / 1.5 */
     cursor: pointer;
     font-size: 11px;
     font-weight: bold;
@@ -273,16 +277,16 @@ body {
 }
 
 .start-button img {
-    width: 16px;
-    height: 16px;
+    width: 10.67px; /* 16px / 1.5 */
+    height: 10.67px; /* 16px / 1.5 */
     image-rendering: pixelated;
 }
 
 .taskbar-separator {
     width: 1px;
-    height: 20px;
+    height: 13.33px; /* 20px / 1.5 */
     background: #808080;
-    margin: 0 4px;
+    margin: 0 2.67px; /* 4px / 1.5 */
 }
 
 /* Taskbar Windows Container */
@@ -290,17 +294,17 @@ body {
     display: flex;
     flex: 1;
     align-items: center;
-    gap: 2px;
-    padding: 0 4px;
+    gap: 1.33px; /* 2px / 1.5 */
+    padding: 0 2.67px; /* 4px / 1.5 */
     overflow: hidden;
 }
 
 /* Taskbar Window Button */
 .taskbar-window-button {
-    height: 24px;
-    min-width: 120px;
-    max-width: 180px;
-    padding: 0 8px;
+    height: 16px; /* 24px / 1.5 */
+    min-width: 80px; /* 120px / 1.5 */
+    max-width: 120px; /* 180px / 1.5 */
+    padding: 0 5.33px; /* 8px / 1.5 */
     background: #c0c0c0;
     border: 1px solid #c0c0c0;
     border-top: 1px solid #ffffff;
@@ -309,7 +313,7 @@ body {
     border-bottom: 1px solid #808080;
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 2.67px; /* 4px / 1.5 */
     cursor: pointer;
     font-size: 11px;
     color: #000000;
@@ -340,8 +344,8 @@ body {
 }
 
 .taskbar-window-button img {
-    width: 16px;
-    height: 16px;
+    width: 10.67px; /* 16px / 1.5 */
+    height: 10.67px; /* 16px / 1.5 */
     image-rendering: pixelated;
     flex-shrink: 0;
 }
@@ -354,8 +358,8 @@ body {
 
 .taskbar-clock {
     margin-left: auto;
-    margin-right: 8px;
-    padding: 2px 8px;
+    margin-right: 5.33px; /* 8px / 1.5 */
+    padding: 1.33px 5.33px; /* 2px 8px / 1.5 */
     background: #c0c0c0;
     border: 1px solid #c0c0c0;
     border-top: 1px solid #808080;
@@ -378,38 +382,38 @@ body {
 }
 
 /* Responsive design */
-@media (max-width: 768px) {
+@media (max-width: 512px) { /* 768px / 1.5 */
     body {
-        font-size: 10px;
+        font-size: 6.67px; /* 10px / 1.5 */
     }
     
     .desktop-icon {
-        width: 56px;
-        height: 70px;
+        width: 37.33px; /* 56px / 1.5 */
+        height: 46.67px; /* 70px / 1.5 */
     }
     
     .icon-image {
-        width: 28px;
-        height: 28px;
+        width: 18.67px; /* 28px / 1.5 */
+        height: 18.67px; /* 28px / 1.5 */
     }
     
     .icon-label {
-        font-size: 10px;
-        max-width: 52px;
+        font-size: 6.67px; /* 10px / 1.5 */
+        max-width: 34.67px; /* 52px / 1.5 */
     }
     
     .taskbar {
-        height: 36px;
+        height: 24px; /* 36px / 1.5 */
     }
     
     .desktop {
-        height: calc(100vh - 36px);
+        height: calc(100vh - 24px); /* 36px / 1.5 */
     }
 }
 
 /* Scrollbar styling for authentic Windows 95 look */
 ::-webkit-scrollbar {
-    width: 16px;
+    width: 10.67px; /* 16px / 1.5 */
 }
 
 ::-webkit-scrollbar-track {
@@ -446,9 +450,9 @@ body {
 /* Start Menu Styles */
 .start-menu {
     position: fixed;
-    bottom: 30px;
+    bottom: 20px; /* 30px / 1.5 */
     left: 0;
-    width: 200px;
+    width: 133.33px; /* 200px / 1.5 */
     background: #c0c0c0;
     border: 2px solid #c0c0c0;
     border-top: 2px solid #ffffff;
@@ -463,14 +467,14 @@ body {
 }
 
 .start-menu-banner {
-    width: 25px;
-    height: 200px;
+    width: 16.67px; /* 25px / 1.5 */
+    height: 133.33px; /* 200px / 1.5 */
     background: linear-gradient(to bottom, #000080, #000040);
     color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 8px 0;
+    padding: 5.33px 0; /* 8px / 1.5 */
     writing-mode: vertical-rl;
     text-orientation: mixed;
     position: absolute;
@@ -480,33 +484,33 @@ body {
 }
 
 .start-menu-banner-text {
-    font-size: 14px;
+    font-size: 9.33px; /* 14px / 1.5 */
     font-weight: bold;
-    letter-spacing: 1px;
+    letter-spacing: 0.67px; /* 1px / 1.5 */
     transform: rotate(180deg);
     white-space: nowrap;
 }
 
 .banner-95 {
-    font-size: 16px;
+    font-size: 10.67px; /* 16px / 1.5 */
     color: #ffff00;
-    margin-left: 2px;
+    margin-left: 1.33px; /* 2px / 1.5 */
 }
 
 .start-menu-content {
-    padding: 2px;
+    padding: 1.33px; /* 2px / 1.5 */
     background: #c0c0c0;
-    margin-left: 25px;
+    margin-left: 16.67px; /* 25px / 1.5 */
 }
 
 .start-menu-item {
     display: flex;
     align-items: center;
-    padding: 4px 8px;
+    padding: 2.67px 5.33px; /* 4px 8px / 1.5 */
     cursor: pointer;
     position: relative;
     white-space: nowrap;
-    min-height: 24px;
+    min-height: 16px; /* 24px / 1.5 */
 }
 
 .start-menu-item:hover:not(.disabled) {
@@ -520,9 +524,9 @@ body {
 }
 
 .start-menu-icon {
-    width: 16px;
-    height: 16px;
-    margin-right: 8px;
+    width: 10.67px; /* 16px / 1.5 */
+    height: 10.67px; /* 16px / 1.5 */
+    margin-right: 5.33px; /* 8px / 1.5 */
     image-rendering: pixelated;
     flex-shrink: 0;
 }
@@ -533,7 +537,7 @@ body {
 
 .submenu-arrow {
     margin-left: auto;
-    font-size: 8px;
+    font-size: 5.33px; /* 8px / 1.5 */
     color: #000000;
 }
 
@@ -544,7 +548,7 @@ body {
 .start-menu-separator {
     height: 1px;
     background: #808080;
-    margin: 2px 4px;
+    margin: 1.33px 2.67px; /* 2px 4px / 1.5 */
     border-bottom: 1px solid #ffffff;
 }
 
@@ -560,17 +564,17 @@ body {
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     z-index: 2001;
     display: none;
-    width: 180px;
-    padding: 2px;
+    width: 120px; /* 180px / 1.5 */
+    padding: 1.33px; /* 2px / 1.5 */
 }
 
 .start-submenu::before {
     content: '';
     position: absolute;
-    left: -6px;
+    left: -4px; /* -6px / 1.5 */
     top: 0;
     bottom: 0;
-    width: 6px;
+    width: 4px; /* 6px / 1.5 */
     background: transparent;
     z-index: 2002;
 }
@@ -578,11 +582,11 @@ body {
 .start-submenu .start-menu-item {
     display: flex;
     align-items: center;
-    padding: 4px 8px;
+    padding: 2.67px 5.33px; /* 4px 8px / 1.5 */
     cursor: pointer;
     position: relative;
     white-space: nowrap;
-    min-height: 24px;
+    min-height: 16px; /* 24px / 1.5 */
 }
 
 .start-submenu .start-menu-item:hover:not(.disabled) {
